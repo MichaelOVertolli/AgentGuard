@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./tests/fixtures/poisoned/**)",
+      "Glob(./tests/fixtures/poisoned/**)",
+      "Grep(./tests/fixtures/poisoned/**)",
+      "Read(./tests/fixtures/decoded_cache/**)"
+    ]
+  }
+}
