@@ -1,0 +1,15 @@
+# AgentGuard rule pack — Phase 1: OVR001 only.
+# Rule block is from the design spec §4 (DIRECT OVERRIDES) with the `example`
+# field deliberately omitted: the bundled corpus is plaintext in-repo, not
+# covered by the tests/fixtures/poisoned/** deny rules, so storing literal
+# injection prose here would re-introduce the very payloads the encoded-fixture
+# pipeline is designed to keep out of Claude Code's read paths. Phrase-shape
+# documentation lives in tests/fixtures/_specs/<rule>_basic.spec.md instead.
+# Per Phase 1 plan D2: no [engine] section yet (added in the phase that first uses it).
+
+[[rules]]
+id = "OVR001"
+name = "ignore-previous-instructions"
+pattern = '(?i)\b(ignore|disregard|forget|override)\s+(all\s+|any\s+|the\s+)?(previous|above|prior|earlier|preceding|system)\s+(instructions?|prompts?|rules?|guidelines?|directives?)'
+default_severity = "warn"
+category_severity = { instruction = "warn", memory = "block", plan = "block", research = "warn", prompt_template = "warn", eval = "warn", code = "silent", config = "warn" }
