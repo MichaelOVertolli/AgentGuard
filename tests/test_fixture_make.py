@@ -279,3 +279,45 @@ def test_no_match_error_does_not_leak_payload_to_stderr_or_exception(
     assert canary not in captured.out
     assert canary not in captured.err
     assert not out.exists()
+
+
+class _TtyStringIO(io.StringIO):
+    """StringIO that lies about being a TTY — exercises the interactive prompt branch."""
+
+    def isatty(self) -> bool:  # pragma: no cover - trivial override
+        return True
+
+
+def test_prints_prompt_when_source_is_tty(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Interactive runs must print the documented stdin-prompt to stderr.
+
+    Spec doc ``tests/fixtures/_specs/ovr001_basic.spec.md`` promises the tool
+    prompts the user before blocking on ``stdin.read()`` — otherwise the tool
+    looks hung in PowerShell. This test pins the visible-prompt behavior.
+    """
+    out = tmp_path / "fx_tty_prompt.py"
+    src = _TtyStringIO("hello world from a tty\n")
+    run("TEST001", out, payload_source=src, cfg=_test_config())
+    captured = capsys.readouterr()
+    assert "Enter payload" in captured.err
+
+
+def test_no_prompt_when_source_is_not_tty(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Piped / scripted runs (CliRunner, ``echo ... |``) must NOT print the prompt.
+
+    Plain ``io.StringIO`` reports ``isatty() == False``; the prompt branch
+    must short-circuit so structured callers don't see stray prose on stderr.
+    """
+    out = tmp_path / "fx_notty_no_prompt.py"
+    run(
+        "TEST001",
+        out,
+        payload_source=io.StringIO("hello world\n"),
+        cfg=_test_config(),
+    )
+    captured = capsys.readouterr()
+    assert "Enter payload" not in captured.err

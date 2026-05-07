@@ -41,6 +41,13 @@ def run(
     rule = cfg.rule_by_id(rule_id)
 
     source = payload_source if payload_source is not None else sys.stdin
+    if getattr(source, "isatty", lambda: False)():
+        click.echo(
+            "Enter payload below. End with a newline, then Ctrl+Z+Enter on Windows "
+            "(Ctrl+D on Linux/Mac). On Windows, Ctrl+Z is only recognized as EOF at "
+            "the start of an empty line, so always press Enter before Ctrl+Z+Enter:",
+            err=True,
+        )
     payload = source.read().rstrip("\r\n")
     _validate_payload(payload, allow_unicode=allow_unicode)
 

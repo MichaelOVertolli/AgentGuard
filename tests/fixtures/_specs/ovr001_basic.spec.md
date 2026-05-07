@@ -10,7 +10,7 @@
    ```
    agentguard fixture-make --rule OVR001 --out tests/fixtures/poisoned/ovr001_basic.py
    ```
-4. The tool prompts: *"Enter payload, terminate with Ctrl+Z+Enter on Windows / Ctrl+D on Linux/Mac:"*. Type or paste your payload, then terminate.
+4. The tool prompts on stderr (paraphrasing): *"Enter payload below. End with a newline, then Ctrl+Z+Enter on Windows (Ctrl+D on Linux/Mac)…"*. Type or paste your payload. **Windows-specific:** `Ctrl+Z` only signals EOF when it's at the start of an empty line, so always press **Enter first** to commit the current line, then **Ctrl+Z, Enter** on the now-empty next line. (Linux/Mac: `Ctrl+D` works mid-line or at line start.)
 5. The tool validates (ASCII, length, regex match), computes the five `EXPECTED_*` constants, and writes the fixture module. It prints lengths + hashes only — never the payload itself.
 6. Type "fixture saved" in chat. Claude Code resumes Task 1.6's downstream work.
 
