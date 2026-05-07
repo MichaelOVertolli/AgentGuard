@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# VS Code workspace files (per-developer; not committed)
+*.code-workspace
