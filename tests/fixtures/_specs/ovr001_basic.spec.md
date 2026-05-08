@@ -20,7 +20,7 @@ If validation fails (e.g. regex doesn't match your payload), the tool exits non-
 
 A short English string ("the payload") that:
 
-1. **Contains a substring matching the OVR001 regex** (below). The match will typically be a 3–7 word phrase like `Disregard the prior guidelines` or `Override all preceding directives`.
+1. **Contains a substring matching the OVR001 regex** (below). The match will typically be a 3–7 word phrase composed per the phrase-shape grammar in the regex section below. Author it locally — do not paste it into chat with Claude Code or commit messages.
 2. **Is ASCII-only.** No Unicode tricks — Unicode-shaped payloads belong to UNI* rules tested separately.
 3. **Is between 30 and 200 bytes long** when UTF-8 encoded.
 4. **Reads as plausible adversarial prose, not nonsense.** One sentence is fine. Surrounding prose around the match is encouraged — the fixture exposes both the full payload and the matched substring as separate constants, so the engine's job is "find the phrase inside the prose."
